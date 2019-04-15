@@ -49,6 +49,7 @@ func (this *CategoryController) Get() {
 
 	this.Data["IsCategory"] = true
 	this.TplName = "category.tpl"
+	this.Data["Islogin"] = checkAccount(this.Ctx)
 
 	var err error
 	this.Data["Categories"], err = models.GetAllCategories()

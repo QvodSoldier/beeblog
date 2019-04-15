@@ -11,6 +11,7 @@
         </div>
 
         <div class="container">
+          body {margin-top: 50px;}
           <h1>分类列表</h1>
           <form method="GET" action="/category">
             <div class="form-group">

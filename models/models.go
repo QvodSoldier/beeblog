@@ -42,6 +42,20 @@ type Topic struct {
 	ReplyLastUserId int64
 }
 
+func AddTopic(title, content string) error {
+	o := orm.NewOrm()
+
+	topic := &Topic{
+		Title:   title,
+		Content: content,
+		Created: time.Now(),
+		Updated: time.Now(),
+	}
+
+	_, err := o.Insert(topic)
+	return err
+}
+
 func RegisterDB() {
 	if !com.IsExist(_DB_NAME) {
 		os.MkdirAll(path.Dir(_DB_NAME), os.ModePerm)
@@ -91,6 +105,20 @@ func DelCategory(id string) error {
 	return err
 }
 
+func GetAllTopics(isDesc bool) ([]*Topic, error) {
+	o := orm.NewOrm()
+	topics := make([]*Topic, 0)
+
+	qs := o.QueryTable("Topic")
+	var err error
+	if isDesc {
+		_, err = qs.OrderBy("-created").All(&topics)
+	} else {
+		_, err = qs.All(&topics)
+	}
+	return topics, err
+}
+
 func GetAllCategories() ([]*Category, error) {
 	o := orm.NewOrm()
 	cates := make([]*Category, 0)
@@ -98,4 +126,55 @@ func GetAllCategories() ([]*Category, error) {
 	qs := o.QueryTable("category")
 	_, err := qs.All(&cates)
 	return cates, err
+}
+
+func GetTopic(tid string) (*Topic, error) {
+	tidNum, err := strconv.ParseInt(tid, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	o := orm.NewOrm()
+
+	topics := new(Topic)
+
+	qs := o.QueryTable("topic")
+	err = qs.Filter("id", tidNum).One(topics)
+	if err != nil {
+		return nil, err
+	}
+
+	topics.Views++
+	_, err = o.Update(topics)
+	return topics, err
+}
+
+func ModifyTopic(tid, title, content string) error {
+	tidNum, err := strconv.ParseInt(tid, 10, 64)
+	if err != nil {
+		return err
+	}
+
+	o := orm.NewOrm()
+	topic := &Topic{Id: tidNum}
+	if o.Read(topic) == nil {
+		topic.Title = title
+		topic.Content = content
+		topic.Updated = time.Now()
+		o.Update(topic)
+	}
+
+	return nil
+}
+
+func DeleteTopic(tid string) error {
+	tidNum, err := strconv.ParseInt(tid, 10, 64)
+	if err != nil {
+		return err
+	}
+
+	o := orm.NewOrm()
+	topic := &Topic{Id: tidNum}
+	_, err = o.Delete(topic)
+	return err
 }
