@@ -23,6 +23,17 @@
                 <label>文章内容: </label>
                 <textarea name="content" clos="30" rows="10" class="form-control"></textarea>
               </div>
+
+              <div class="form-group">
+                <label>文章标签: </label>
+                <input type="text" name="label" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label>文章分类: </label>
+                <input type="text" name="category" class="form-control">
+              </div>
+
               <button type="submit" class="btn btn-default">添加文章</button>
           </form>
         </div>

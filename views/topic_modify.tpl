@@ -24,6 +24,17 @@
                 <label>文章内容: </label>
                 <textarea name="content" clos="30" rows="10" class="form-control">{{.Topic.Content}}</textarea>
               </div>
+
+              <div class="form-group">
+                <label>文章标签: </label>
+                <input type="text" name="label" class="form-control" value="{{.Topic.Labels}}">
+              </div>
+
+              <div class="form-group">
+                <label>文章分类: </label>
+                <input type="text" name="category" class="form-control" value="{{.Topic.Category}}">
+              </div>
+
               <button type="submit" class="btn btn-default">提交修改</button>
           </form>
         </div>
